@@ -9,7 +9,7 @@ export const fetchUserProfile = async (accessToken: string) => {
   return userProfile;
 };
 
-export const fetchUserTopArtists = async (accessToken: string) => {
+export const fetchUserTopArtistsFromSpotify = async (accessToken: string) => {
   const userTopArtistsResponse = await fetch("https://api.spotify.com/v1/me/top/artists?offset=1", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -20,21 +20,19 @@ export const fetchUserTopArtists = async (accessToken: string) => {
   return userTopArtists;
 };
 
-export const getUserTopArtistsIds = async (accessToken: string) => {
-  const userTopArtists = await fetchUserTopArtists(accessToken);
+export const getUserTopArtistsIdsFromSpotify = async (accessToken: string) => {
+  const userTopArtists = await fetchUserTopArtistsFromSpotify(accessToken);
   const userTopArtistsIds = userTopArtists.items.map((artist: any) => artist.id);
   return userTopArtistsIds;
 };
 
-export const fetchConcertsByArtistId = async (accessToken: string, artistId: string) => {
-  console.log("fetchConcertsByArtistId -> ", artistId);
-  const concertsResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/concerts`, {
+export const getArtistByIdFromSpotify = async (accessToken: string, artistId: string) => {
+  const artistResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
 
-  const concerts = await concertsResponse.json();
-  console.log("Concerts -> ", concerts);
-  return concerts;
+  const artist = await artistResponse.json();
+  return artist;
 };

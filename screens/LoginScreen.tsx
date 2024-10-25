@@ -3,8 +3,15 @@ import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { Button, Text, View, Alert } from "react-native";
 import { fetchAccessToken } from "../services/authService";
-import { fetchUserProfile, fetchUserTopArtists, fetchConcertsByArtistId, getUserTopArtistsIds } from "../services/spotifyService";
+import { fetchUserProfile, fetchUserTopArtistsFromSpotify, getUserTopArtistsIdsFromSpotify } from "../services/spotifyService";
 import { SPOTIFY_CLIENT_ID } from "../constants/IDs";
+import ExcelService from "../services/dbService";
+import dbService from "../services/dbService";
+import { useDispatch } from "react-redux";
+import { setAccessToken } from "../store/authSlice";
+import ConcertInfo from "../components/ConcertInfoBox";
+import ConcertCarousel from "@/components/ConcertCarousel";
+import ArtistProfileBox from "@/components/ArtistProfileBox";
 
 const client_id = SPOTIFY_CLIENT_ID;
 
@@ -13,8 +20,9 @@ WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
   const [userName, setUserName] = useState<string | null>(null);
   const [userTopArtists, setUserTopArtists] = useState<any[] | null>(null);
-  const [userConcerts, setUserConcerts] = useState<any[] | null>(null);
   const [userTopArtistsIds, setUserTopArtistsIds] = useState<string[] | null>(null);
+
+  const dispatch = useDispatch();
 
   const [request, response, promptAsync] = useAuthRequest(
     {
@@ -31,6 +39,9 @@ export default function LoginScreen() {
     }
   );
 
+  const concertData = dbService.getConcertById(24);
+  console.log("concertData", concertData);
+
   useEffect(() => {
     if (response?.type === "success") {
       const { code } = response.params;
@@ -40,27 +51,22 @@ export default function LoginScreen() {
         try {
           const redirectUri = makeRedirectUri({ scheme: "exp" });
 
-          // Access token al
           const accessToken = await fetchAccessToken(code, redirectUri);
           console.log("Access Token: ", accessToken);
 
-          // Kullanıcı bilgilerini al
+          dispatch(setAccessToken(accessToken));
+
           const userProfile = await fetchUserProfile(accessToken);
           console.log("User Profile: ", userProfile);
 
-          const userTopArtists = await fetchUserTopArtists(accessToken);
+          const userTopArtists = await fetchUserTopArtistsFromSpotify(accessToken);
 
-          const userTopArtistsIds = await getUserTopArtistsIds(accessToken);
+          const userTopArtistsIds = await getUserTopArtistsIdsFromSpotify(accessToken);
           console.log("User Top Artists IDs: ", userTopArtistsIds);
 
-          const concerts = await fetchConcertsByArtistId(accessToken, userTopArtistsIds[0]);
-          console.log("Concerts: ", concerts);
-
-          // Kullanıcı adını state'e kaydet
-          setUserName(userProfile.display_name); // Kullanıcının adını alıp kaydediyoruz
+          setUserName(userProfile.display_name);
           setUserTopArtists(userTopArtists.items);
           setUserTopArtistsIds(userTopArtistsIds);
-          setUserConcerts(concerts);
         } catch (error) {
           Alert.alert("Error", "Failed to login with Spotify.");
         }
@@ -74,14 +80,16 @@ export default function LoginScreen() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {userName ? <Text>Welcome, {userName}!</Text> : <Text>Please login to Spotify</Text>}
 
-      {userTopArtists && (
+      {/* {userTopArtists && (
         <View>
           <Text>Your top artists:</Text>
           {userTopArtists.map((artist) => (
             <Text key={artist.id}>{artist.name}</Text>
           ))}
         </View>
-      )}
+      )} */}
+
+      <ConcertCarousel />
 
       <Button
         disabled={!request}
