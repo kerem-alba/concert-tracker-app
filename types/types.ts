@@ -1,8 +1,11 @@
 export type RootStackParamList = {
   Home: undefined;
   Details: undefined;
-  ArtistProfile: undefined;
+  ArtistDetails: { concert: Concert };
   Login: undefined;
+  ConcertDetails: { concert: Concert };
+  PopularConcerts: undefined;
+  UpcomingConcerts: undefined;
 };
 
 export interface Artist {
@@ -12,3 +15,16 @@ export interface Artist {
   popularity: number;
   images: { url: string }[];
 }
+
+type Concert = {
+  artistId: string;
+  artistName: string;
+  city: string;
+  concertId: string;
+  date: string;
+  genres: string[];
+  imageUrl1: string;
+  imageUrl2: string;
+  popularity: number;
+  venue: string;
+};

@@ -8,17 +8,18 @@ import PopConcertGrid from "@/components/PopConcertGrid";
 import FavConcertCarousel from "@/components/FavConcertCarousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserHeader from "@/components/UserHeader";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
-
-export default function HomeScreen({ navigation: { navigate } }: HomeScreenProps) {
+export default function HomeScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <SafeAreaView style={styles.container}>
       <UserHeader />
       <ScrollView>
         <FavConcertCarousel />
         <PopConcertGrid />
-        <Button title="Artist Details" onPress={() => navigate("Details")} />
+        <UpcomingConcertsComponent />
+        <Button title="Artist Details" onPress={() => navigation.navigate("Details")} />
       </ScrollView>
     </SafeAreaView>
   );

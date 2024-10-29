@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Dimensions, StyleSheet } from "react-native";
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import ConcertInfoBox from "./FavConcertInfoBox";
 import { getUserFavorites } from "../services/spotifyService";
@@ -43,7 +43,12 @@ export default function FavConcertCarousel() {
   }, [accessToken]);
   return (
     <View style={styles.container}>
-      <Text style={styles.text}> İlgini çekebilecek yaklaşan konserler </Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}> İlgini çekebilecek yaklaşan konserler </Text>
+        <TouchableOpacity>
+          <Text style={styles.text}> Tümünü Gör </Text>
+        </TouchableOpacity>
+      </View>
       <Carousel
         width={width * 0.95}
         height={280}
@@ -64,12 +69,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
-    fontSize: 12,
+  headerContainer: {
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  header: {
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
     color: "white",
     alignSelf: "flex-start",
+    paddingLeft: 10,
+  },
+  text: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "gray",
+    textAlign: "left",
     paddingLeft: 10,
   },
 });

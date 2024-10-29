@@ -1,4 +1,3 @@
-// services/authService.ts
 import { Buffer } from "buffer";
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from "../constants/IDs";
 

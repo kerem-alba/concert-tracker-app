@@ -4,13 +4,17 @@ import React, { useEffect, useState } from "react";
 const { width } = Dimensions.get("window");
 
 export default function PopConcertInfoBox({ concert }: { concert: any }) {
+  const { artistName, venue, city, date, imageUrl1 } = concert;
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: concert.imageUrl1 }} style={styles.image} />
-      <Text>{concert.artistName}</Text>
-      <Text>{concert.city}</Text>
-      <Text>{concert.venue}</Text>
-      <Text>{concert.date}</Text>
+      <Image source={{ uri: imageUrl1 }} style={styles.image} />
+      <View style={styles.textContainer}>
+        <Text style={styles.artistName}>{artistName}</Text>
+        <Text style={styles.city}>{city}</Text>
+        <Text style={styles.venue}>{venue}</Text>
+        <Text style={styles.date}>{date}</Text>
+      </View>
     </View>
   );
 }
@@ -23,8 +27,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "red",
   },
+  textContainer: {
+    padding: 10,
+  },
   image: {
     width: "100%",
     height: 150,
+  },
+  artistName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  venue: {
+    fontSize: 12,
+    color: "#555",
+    marginTop: 5,
+  },
+  date: {
+    fontSize: 12,
+    color: "#888",
+    marginTop: 5,
+  },
+  placeholderImage: {
+    width: "100%",
+    height: 200,
+    backgroundColor: "#ccc",
+  },
+  city: {
+    fontSize: 16,
+    color: "#555",
+    marginTop: 5,
   },
 });

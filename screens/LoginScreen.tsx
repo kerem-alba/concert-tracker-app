@@ -64,7 +64,6 @@ export default function LoginScreen() {
 
   return (
     <LinearGradient colors={["#1DB954", "#191414"]} style={styles.gradient}>
-      {/* {userName ? <Text style={styles.welcomeText}>Hoşgeldin, {userName}!</Text> : <Text style={styles.loginPrompt}>Spotify ile giriş yapın</Text>} */}
       <TouchableOpacity style={styles.spotifyButton} disabled={!request} onPress={() => promptAsync()}>
         <Entypo name="spotify" size={24} color="white" style={styles.icon} />
         <Text style={styles.buttonText}>Spotify ile Giriş Yap</Text>

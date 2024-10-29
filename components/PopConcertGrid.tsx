@@ -1,10 +1,13 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import PopConcertInfoBox from "./PopConcertInfoBox";
 import { getPopularConcerts } from "@/services/dbService";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/types/types";
 
 export default function PopConcertGrid() {
   const [popularConcerts, setPopularConcerts] = useState<any | null>(null);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const fetchConcerts = async () => {
@@ -22,7 +25,11 @@ export default function PopConcertGrid() {
         data={popularConcerts}
         keyExtractor={(item) => item.concertId}
         numColumns={2}
-        renderItem={({ item }) => <PopConcertInfoBox concert={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => navigation.navigate("ConcertDetails", { concert: item })}>
+            <PopConcertInfoBox concert={item} />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );

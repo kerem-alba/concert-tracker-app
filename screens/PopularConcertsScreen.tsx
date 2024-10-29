@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function ArtistProfileScreen() {
+export default function PopularConcertsScreen() {
   return (
     <View>
-      <Text>ArtistProfileScreen</Text>
+      <Text>PopularConcertsScreen</Text>
     </View>
   );
 }
