@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 
-console.log("Store initialized"); // Store'un oluşturulma durumunu kontrol etmek için
+console.log("Store initialized");
 
 const store = configureStore({
   reducer: {

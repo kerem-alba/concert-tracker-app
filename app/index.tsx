@@ -15,11 +15,11 @@ const RootStack = createStackNavigator<RootStackParamList>();
 export default function Index() {
   return (
     <Provider store={store}>
-      <RootStack.Navigator initialRouteName="Home">
-        <RootStack.Screen name="Home" component={HomeScreen} />
+      <RootStack.Navigator initialRouteName="Login">
+        <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="Details" component={DetailsScreen} />
         <RootStack.Screen name="ArtistProfile" component={ArtistProfileScreen} />
-        <RootStack.Screen name="Login" component={LoginScreen} />
+        <RootStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       </RootStack.Navigator>
     </Provider>
   );

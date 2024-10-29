@@ -1,4 +1,5 @@
-export const fetchUserProfile = async (accessToken: string) => {
+import { Artist } from "@/types/types";
+export const getUserProfileFromSpotify = async (accessToken: string) => {
   const userProfileResponse = await fetch("https://api.spotify.com/v1/me", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -7,23 +8,6 @@ export const fetchUserProfile = async (accessToken: string) => {
 
   const userProfile = await userProfileResponse.json();
   return userProfile;
-};
-
-export const fetchUserTopArtistsFromSpotify = async (accessToken: string) => {
-  const userTopArtistsResponse = await fetch("https://api.spotify.com/v1/me/top/artists?offset=1", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  const userTopArtists = await userTopArtistsResponse.json();
-  return userTopArtists;
-};
-
-export const getUserTopArtistsIdsFromSpotify = async (accessToken: string) => {
-  const userTopArtists = await fetchUserTopArtistsFromSpotify(accessToken);
-  const userTopArtistsIds = userTopArtists.items.map((artist: any) => artist.id);
-  return userTopArtistsIds;
 };
 
 export const getArtistByIdFromSpotify = async (accessToken: string, artistId: string) => {
@@ -35,4 +19,47 @@ export const getArtistByIdFromSpotify = async (accessToken: string, artistId: st
 
   const artist = await artistResponse.json();
   return artist;
+};
+
+const formatArtistData = (artist: Artist) => {
+  return {
+    name: artist.name,
+    id: artist.id,
+    popularity: artist.popularity || null,
+    genre1: artist.genres[0] || null,
+    genre2: artist.genres[1] || null,
+    genre3: artist.genres[2] || null,
+    imageUrl1: artist.images[0] ? artist.images[0].url : null,
+    imageUrl2: artist.images[1] ? artist.images[1].url : null,
+  };
+};
+
+const getFollowedArtistsFromSpotify = async (accessToken: string) => {
+  const followedArtistsResponse = await fetch("https://api.spotify.com/v1/me/following?type=artist&limit=50", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const response = await followedArtistsResponse.json();
+  const followedArtistsData = response.artists.items.map(formatArtistData);
+  return followedArtistsData;
+};
+
+const getMostListenedArtistsFromSpotify = async (accessToken: string) => {
+  const userTopArtistsResponse = await fetch("https://api.spotify.com/v1/me/top/artists?limit=50", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const response = await userTopArtistsResponse.json();
+  const userTopArtistsData = response.items.map(formatArtistData);
+  console.log("Most listened artists requested from Spotify ");
+  return userTopArtistsData;
+};
+
+export const getUserFavorites = async (accessToken: string) => {
+  const followedArtists = await getFollowedArtistsFromSpotify(accessToken);
+  const mostListenedArtists = await getMostListenedArtistsFromSpotify(accessToken);
+  const favorites = [...mostListenedArtists, ...followedArtists];
+  return favorites;
 };

@@ -17,7 +17,6 @@ export default function ArtistProfileBox({ artistId }: { artistId: string }) {
       setArtist(artist);
       console.log("Artist: ", artist);
       console.log("Artist name: ", artist.name);
-      console.log("Artist genres: ", artist.genres.slice(0, 3).join(", "));
     };
 
     fetchArtist();

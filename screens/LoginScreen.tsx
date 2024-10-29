@@ -1,33 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
-import { Button, Text, View, Alert } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet, Alert } from "react-native";
 import { fetchAccessToken } from "../services/authService";
-import { fetchUserProfile, fetchUserTopArtistsFromSpotify, getUserTopArtistsIdsFromSpotify } from "../services/spotifyService";
 import { SPOTIFY_CLIENT_ID } from "../constants/IDs";
-import ExcelService from "../services/dbService";
-import dbService from "../services/dbService";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../store/authSlice";
-import ConcertInfo from "../components/ConcertInfoBox";
-import ConcertCarousel from "@/components/ConcertCarousel";
-import ArtistProfileBox from "@/components/ArtistProfileBox";
+import { setUserProfile } from "../store/authSlice";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/types/types";
+import Entypo from "@expo/vector-icons/Entypo";
+import { LinearGradient } from "expo-linear-gradient";
+import { getUserProfileFromSpotify } from "@/services/spotifyService";
 
 const client_id = SPOTIFY_CLIENT_ID;
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userTopArtists, setUserTopArtists] = useState<any[] | null>(null);
-  const [userTopArtistsIds, setUserTopArtistsIds] = useState<string[] | null>(null);
-
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
 
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: client_id,
-      scopes: ["user-read-email", "playlist-modify-public", "user-top-read"],
+      scopes: ["user-read-email", "playlist-modify-public", "user-top-read", "user-follow-read"],
       usePKCE: false,
       redirectUri: makeRedirectUri({
         scheme: "exp",
@@ -39,9 +36,6 @@ export default function LoginScreen() {
     }
   );
 
-  const concertData = dbService.getConcertById(24);
-  console.log("concertData", concertData);
-
   useEffect(() => {
     if (response?.type === "success") {
       const { code } = response.params;
@@ -50,23 +44,15 @@ export default function LoginScreen() {
       const handleSpotifyLogin = async () => {
         try {
           const redirectUri = makeRedirectUri({ scheme: "exp" });
-
           const accessToken = await fetchAccessToken(code, redirectUri);
           console.log("Access Token: ", accessToken);
-
           dispatch(setAccessToken(accessToken));
 
-          const userProfile = await fetchUserProfile(accessToken);
+          const userProfile = await getUserProfileFromSpotify(accessToken);
           console.log("User Profile: ", userProfile);
+          dispatch(setUserProfile(userProfile));
 
-          const userTopArtists = await fetchUserTopArtistsFromSpotify(accessToken);
-
-          const userTopArtistsIds = await getUserTopArtistsIdsFromSpotify(accessToken);
-          console.log("User Top Artists IDs: ", userTopArtistsIds);
-
-          setUserName(userProfile.display_name);
-          setUserTopArtists(userTopArtists.items);
-          setUserTopArtistsIds(userTopArtistsIds);
+          navigation.navigate("Home");
         } catch (error) {
           Alert.alert("Error", "Failed to login with Spotify.");
         }
@@ -77,27 +63,48 @@ export default function LoginScreen() {
   }, [response]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {userName ? <Text>Welcome, {userName}!</Text> : <Text>Please login to Spotify</Text>}
-
-      {/* {userTopArtists && (
-        <View>
-          <Text>Your top artists:</Text>
-          {userTopArtists.map((artist) => (
-            <Text key={artist.id}>{artist.name}</Text>
-          ))}
-        </View>
-      )} */}
-
-      <ConcertCarousel />
-
-      <Button
-        disabled={!request}
-        title="Login"
-        onPress={() => {
-          promptAsync();
-        }}
-      />
-    </View>
+    <LinearGradient colors={["#1DB954", "#191414"]} style={styles.gradient}>
+      {/* {userName ? <Text style={styles.welcomeText}>Hoşgeldin, {userName}!</Text> : <Text style={styles.loginPrompt}>Spotify ile giriş yapın</Text>} */}
+      <TouchableOpacity style={styles.spotifyButton} disabled={!request} onPress={() => promptAsync()}>
+        <Entypo name="spotify" size={24} color="white" style={styles.icon} />
+        <Text style={styles.buttonText}>Spotify ile Giriş Yap</Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  welcomeText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 20,
+  },
+  loginPrompt: {
+    fontSize: 18,
+    color: "#FFFFFF",
+    marginBottom: 20,
+  },
+  spotifyButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1DB954",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    marginTop: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
