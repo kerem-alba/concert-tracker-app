@@ -1,8 +1,6 @@
-import { View, ScrollView, Button, Text, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { ScrollView, Button, StyleSheet } from "react-native";
+import React from "react";
 import { RootStackParamList } from "@/types/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import UpcomingConcertsComponent from "@/components/UpcomingConcertsCarousel";
 import PopConcertGrid from "@/components/PopConcertGrid";
 import FavConcertCarousel from "@/components/FavConcertCarousel";

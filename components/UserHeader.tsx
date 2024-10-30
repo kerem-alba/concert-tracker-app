@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { getAddressFromCoordinates } from "../services/locationService";
 import * as Location from "expo-location";
+import SlideInMenu from "@/components/SlideInMenu";
 import Entypo from "@expo/vector-icons/Entypo";
 
 export default function UserHeader() {
@@ -28,12 +29,12 @@ export default function UserHeader() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.menu}>
-        <Entypo name="menu" size={36} color="#aaa" />
-      </View>
+      <View style={styles.menu}></View>
+      <SlideInMenu />
       <View style={styles.rightContainer}>
         <View style={styles.location}>
           <Entypo name="location" size={16} color="#aaa" />
+
           <Text style={styles.locationText}>{locationText}</Text>
         </View>
         <Text style={styles.text}>{userProfile ? userProfile.display_name.split(" ")[0] : "User"}</Text>
