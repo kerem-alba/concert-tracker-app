@@ -17,7 +17,6 @@ export default function HomeScreen() {
         <FavConcertCarousel />
         <PopConcertGrid />
         <UpcomingConcertsComponent />
-        <Button title="Artist Details" onPress={() => navigation.navigate("Details")} />
       </ScrollView>
     </SafeAreaView>
   );

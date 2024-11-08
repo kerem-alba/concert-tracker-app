@@ -17,9 +17,9 @@ export default function ArtistDetailsScreen({ route }: Props) {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Artist Details</Text>
 
-        <Image source={{ uri: concert.imageUrl1 }} style={styles.image} />
+        <Image source={{ uri: concert.ImgUrl }} style={styles.image} />
 
-        <Text style={styles.artistName}>{concert.artistName}</Text>
+        <Text style={styles.artistName}>{concert.ArtistName}</Text>
       </ScrollView>
     </SafeAreaView>
   );

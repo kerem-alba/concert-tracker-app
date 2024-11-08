@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import PopConcertInfoBox from "./PopConcertInfoBox";
-import { getPopularConcerts } from "@/services/dbService";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/types/types";
+import { getConcertsByPopularity } from "@/api/concertsApi";
 
 export default function PopConcertGrid() {
   const [popularConcerts, setPopularConcerts] = useState<any | null>(null);
@@ -11,19 +11,18 @@ export default function PopConcertGrid() {
 
   useEffect(() => {
     const fetchConcerts = async () => {
-      const popularConcerts = await getPopularConcerts(6);
+      const popularConcerts = await getConcertsByPopularity(6);
       setPopularConcerts(popularConcerts);
     };
     fetchConcerts();
-  }, []),
-    console.log("popularConcerts", popularConcerts);
+  }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Popüler Konserler</Text>
       <FlatList
         style={styles.flatList}
         data={popularConcerts}
-        keyExtractor={(item) => item.concertId}
+        keyExtractor={(item) => item.Id.toString()}
         numColumns={2}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => navigation.navigate("ConcertDetails", { concert: item })}>

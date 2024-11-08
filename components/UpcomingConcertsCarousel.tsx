@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import { getUpcomingConcerts } from "@/services/dbService";
 import UpcomingConcertInfoBox from "./UpcomingConcertsInfoBox";
+import { getConcertsByUpcoming } from "../api/concertsApi";
 
 const { width } = Dimensions.get("window");
 
@@ -17,7 +17,7 @@ export default function UpcomingConcertCarousel() {
 
   useEffect(() => {
     const fetchUpcomingConcerts = async () => {
-      const data = await getUpcomingConcerts(10);
+      const data = await getConcertsByUpcoming(10);
       setupcomingConcerts(data);
     };
     fetchUpcomingConcerts();

@@ -4,16 +4,15 @@ import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 const { width } = Dimensions.get("window");
 
 export default function FavConcertInfoBox({ concert }: { concert: any }) {
-  const { artistName, venue, city, date, imageUrl1 } = concert;
-
+  const { ArtistName, Venue, City, ConcertDate, ImgUrl } = concert;
   return (
     <View style={styles.box}>
-      <Image source={{ uri: imageUrl1 }} style={styles.image} />
+      <Image source={{ uri: ImgUrl }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.artistName}>{artistName}</Text>
-        <Text style={styles.city}>{city}</Text>
-        <Text style={styles.venue}>{venue}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.artistName}>{ArtistName}</Text>
+        <Text style={styles.city}>{City}</Text>
+        <Text style={styles.venue}>{Venue}</Text>
+        <Text style={styles.date}>{ConcertDate}</Text>
       </View>
     </View>
   );

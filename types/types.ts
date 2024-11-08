@@ -17,14 +17,12 @@ export interface Artist {
 }
 
 type Concert = {
-  artistId: string;
-  artistName: string;
-  city: string;
-  concertId: string;
-  date: string;
+  ArtistName: string;
+  City: string;
+  Id: string;
+  ConcertDate: string;
   genres: string[];
-  imageUrl1: string;
-  imageUrl2: string;
+  ImgUrl: string;
   popularity: number;
-  venue: string;
+  Venue: string;
 };

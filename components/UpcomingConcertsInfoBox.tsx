@@ -6,11 +6,11 @@ const { width } = Dimensions.get("window");
 export default function UpcomingConcertInfoBox({ concert }: { concert: any }) {
   return (
     <View style={styles.box}>
-      <Image source={{ uri: concert.imageUrl1 }} style={styles.image} />
+      <Image source={{ uri: concert.ImgUrl }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.artistName}>{concert.artistName}</Text>
-        <Text style={styles.city}>{concert.city}</Text>
-        <Text style={styles.venue}>{concert.venue}</Text>
+        <Text style={styles.artistName}>{concert.ArtistName}</Text>
+        <Text style={styles.city}>{concert.City}</Text>
+        <Text style={styles.venue}>{concert.Venue}</Text>
       </View>
     </View>
   );

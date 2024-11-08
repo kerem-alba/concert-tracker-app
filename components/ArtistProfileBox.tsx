@@ -15,7 +15,6 @@ export default function ArtistProfileBox({ artistId }: { artistId: string }) {
       }
       const artist = await getArtistByIdFromSpotify(accessToken, artistId);
       setArtist(artist);
-      console.log("Artist: ", artist);
       console.log("Artist name: ", artist.name);
     };
 

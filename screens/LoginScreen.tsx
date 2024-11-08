@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
-import { TouchableOpacity, Text, View, StyleSheet, Alert } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet, Alert, Button } from "react-native";
 import { fetchAccessToken } from "../services/authService";
 import { SPOTIFY_CLIENT_ID } from "../constants/IDs";
 import { useDispatch } from "react-redux";

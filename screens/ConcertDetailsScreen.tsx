@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Pressable } from "react-native";
+import { Text, StyleSheet, Image, ScrollView, Dimensions, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/types/types";
@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 import { getCoordinatesFromAddress } from "@/services/locationService";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const width = Dimensions.get("window").width;
 
@@ -17,6 +16,7 @@ type Props = {
 export default function ConcertDetailsScreen({ route }: Props) {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { concert } = route.params;
+  console.log(concert);
 
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -27,7 +27,7 @@ export default function ConcertDetailsScreen({ route }: Props) {
 
   useEffect(() => {
     const fetchCoordinates = async () => {
-      const address = `${concert.city}`;
+      const address = `${concert.City}`;
       const location = await getCoordinatesFromAddress(address);
 
       if (location) {
@@ -41,24 +41,24 @@ export default function ConcertDetailsScreen({ route }: Props) {
     };
 
     fetchCoordinates();
-  }, [concert.city, concert.venue]);
+  }, [concert.City, concert.Venue]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Text style={styles.title}>Concert Details</Text>
         <Pressable onPress={() => navigation.navigate("ArtistDetails", { concert: concert })}>
-          <Image source={{ uri: concert.imageUrl1 }} style={styles.image} />
+          <Image source={{ uri: concert.ImgUrl }} style={styles.image} />
 
-          <Text style={styles.artistName}>{concert.artistName}</Text>
+          <Text style={styles.artistName}>{concert.ArtistName}</Text>
         </Pressable>
-        <Text style={styles.venue}>Venue: {concert.venue}</Text>
-        <Text style={styles.city}>City: {concert.city}</Text>
-        <Text style={styles.date}>Date: {concert.date}</Text>
+        <Text style={styles.venue}>Venue: {concert.Venue}</Text>
+        <Text style={styles.city}>City: {concert.City}</Text>
+        <Text style={styles.date}>Date: {concert.ConcertDate}</Text>
 
         <Text style={styles.sectionTitle}>Location on Map:</Text>
         <MapView style={styles.map} region={region}>
-          <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} title={concert.venue} description={concert.city} />
+          <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} title={concert.Venue} description={concert.City} />
         </MapView>
       </ScrollView>
     </SafeAreaView>
