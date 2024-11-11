@@ -6,6 +6,7 @@ import ArtistDetailsScreen from "@/screens/ArtistDetailsScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import PopularConcertsScreen from "@/screens/PopularConcertsScreen";
 import UpcomingConcertsScreen from "@/screens/UpcomingConcertsScreen";
+import ExploreConcertsScreen from "@/screens/ExploreConcertsScreen";
 import { RootStackParamList } from "@/types/types";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider } from "react-redux";
@@ -26,6 +27,7 @@ export default function Index() {
         <RootStack.Screen name="ConcertDetails" component={ConcertDetailsScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="PopularConcerts" component={PopularConcertsScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="UpcomingConcerts" component={UpcomingConcertsScreen} options={{ headerShown: false }} />
+        <RootStack.Screen name="ExploreConcerts" component={ExploreConcertsScreen} options={{ headerShown: false }} />
       </RootStack.Navigator>
     </Provider>
   );

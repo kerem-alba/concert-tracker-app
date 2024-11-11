@@ -40,6 +40,26 @@ export const getConcertsByFavoriteArtists = async (favorites) => {
   }
 };
 
+export const getConcertsByRelatedArtistNames = async (relatedArtists) => {
+  const relatedArtistNames = relatedArtists.join(",");
+  try {
+    const response = await fetch(`${BASE_URL}/concerts/favorites?favoriteArtists=${encodeURIComponent(relatedArtistNames)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Benzer sanatçılara göre konserleri getirirken hata oluştu");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Hata:", error);
+    throw error;
+  }
+};
+
 export const getConcertsByPopularity = async (limit) => {
   try {
     const response = await fetch(`${BASE_URL}/concerts/populars?limit=${limit}`);
@@ -56,6 +76,16 @@ export const getConcertsByUpcoming = async (limit) => {
     return await response.json();
   } catch (error) {
     console.error("Yaklaşan konserleri getirirken hata oluştu:", error);
+    throw error;
+  }
+};
+
+export const getAllConcertsWithArtistInfo = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/concerts/allwithdetails`);
+    return await response.json();
+  } catch (error) {
+    console.error("Sanatçı bilgileri ile konserleri getirirken hata oluştu:", error);
     throw error;
   }
 };

@@ -59,6 +59,16 @@ export default function SlideInMenu() {
             <Text style={styles.menuButtonText}>PopularConcerts</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => {
+              closeMenu();
+              navigation.navigate("ExploreConcerts");
+            }}
+          >
+            <Text style={styles.menuButtonText}>ExploreConcerts</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.menuButton} onPress={closeMenu}>
             <Text style={styles.menuButtonText}>Close Menu</Text>
           </TouchableOpacity>

@@ -63,3 +63,31 @@ export const getUserFavorites = async (accessToken: string) => {
   const favorites = [...mostListenedArtists, ...followedArtists];
   return favorites;
 };
+
+export const getRelatedArtistNames = async (artists: any[], accessToken: string) => {
+  const uniqueArtistNames = new Set<string>();
+
+  for (const artist of artists) {
+    try {
+      const relatedArtistsResponse = await fetch(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!relatedArtistsResponse.ok) {
+        console.error(`Error fetching related artists for ${artist.name}`);
+        continue;
+      }
+
+      const response = await relatedArtistsResponse.json();
+      const relatedArtistsNames = response.artists.slice(0, 3).map((relatedArtist: any) => relatedArtist.name);
+
+      relatedArtistsNames.forEach((name: string) => uniqueArtistNames.add(name));
+    } catch (error) {
+      console.error(`Error fetching related artists for ${artist.name}: ${error}`);
+    }
+  }
+
+  return Array.from(uniqueArtistNames);
+};
